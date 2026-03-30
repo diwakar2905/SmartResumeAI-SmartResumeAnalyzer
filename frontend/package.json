@@ -1,0 +1,10 @@
+{
+  "name": "smart-resume-analyzer-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Smart Resume Analyzer",
+  "scripts": {
+    "dev": "npx http-server public -p 3000 -c-1",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "dependencies": {}
+}

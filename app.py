@@ -37,16 +37,23 @@ app = FastAPI(
     version="2.0.0"
 )
 
-# Configure CORS
+# Configure CORS - Allow requests from Vercel frontend
 CORS_ORIGINS = os.environ.get('CORS_ORIGINS', '*').split(',')
+if CORS_ORIGINS == ['*']:
+    # Allow all origins in development
+    allow_origins = ['*']
+else:
+    # Allow specific origins in production
+    allow_origins = [origin.strip() for origin in CORS_ORIGINS]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-logger.info(f"CORS configured for origins: {CORS_ORIGINS}")
+logger.info(f"CORS configured for origins: {allow_origins}")
 
 # Configuration
 MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB max file size
