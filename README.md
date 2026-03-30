@@ -1,6 +1,6 @@
 # 🧠 Smart Resume Analyzer
 
-**A powerful, AI-driven resume analysis tool to help job seekers optimize their resumes and stand out to recruiters.**
+*A powerful, AI-driven resume analysis tool to help job seekers optimize their resumes and stand out to recruiters.*
 
 [![GitHub](https://img.shields.io/badge/GitHub-SmartResumeAI-blue?logo=github)](https://github.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green)](https://fastapi.tiangolo.com/)
