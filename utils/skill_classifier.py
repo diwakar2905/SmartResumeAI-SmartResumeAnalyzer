@@ -20,11 +20,14 @@ except (FileNotFoundError, json.JSONDecodeError):
     default_skill_dict = {
         "Programming Languages": ["python", "java", "javascript", "c++", "c#", "go", "rust", "swift", "kotlin", "php", "ruby", "scala"],
         "Web & Frontend": ["html", "css", "sass", "react", "angular", "vue", "next.js", "jquery", "bootstrap", "tailwind"],
-        "Backend & Frameworks": ["node.js", "express", "django", "flask", "spring", "ruby on rails", ".net", "fastapi"],
-        "Databases": ["sql", "mysql", "postgresql", "mongodb", "redis", "sqlite", "oracle", "cassandra", "dynamodb"],
+        "Backend & Databases": ["node.js", "express", "django", "flask", "spring", "ruby on rails", ".net", "fastapi", "postgresql", "mysql", "mongodb", "redis"],
         "Cloud & DevOps": ["aws", "azure", "gcp", "docker", "kubernetes", "terraform", "ansible", "jenkins", "ci/cd", "git", "github actions"],
         "Data Science & ML": ["pandas", "numpy", "scikit-learn", "tensorflow", "pytorch", "keras", "matplotlib", "seaborn", "jupyter", "apache spark"],
-        "Software & Tools": ["jira", "confluence", "figma", "postman", "linux", "bash", "powershell"]
+        "Mobile Development": ["react native", "flutter", "swift", "kotlin", "xamarin", "ionic"],
+        "Testing & QA": ["jest", "mocha", "pytest", "junit", "selenium", "cypress", "postman"],
+        "Software Architecture": ["microservices", "monolithic", "design patterns", "clean architecture", "solid principles"],
+        "Communication & Tools": ["jira", "confluence", "figma", "postman", "linux", "bash", "powershell", "agile", "scrum"],
+        "Security": ["oauth", "jwt", "ssl/tls", "encryption", "authentication", "authorization", "owasp"]
     }
 
 # Enhanced skill patterns for better detection - Better detection ke liye enhanced skill patterns
@@ -39,15 +42,11 @@ ENHANCED_SKILL_PATTERNS = {
         r'\b(frontend|front-end|front\s+end|web\s+development|ui/ux|user\s+interface)\b',
         r'\b(built|developed|created)\s+(web|frontend|ui)\s+(using\s+)?(html|css|react|angular|vue)\b'
     ],
-    "Backend & Frameworks": [
+    "Backend & Databases": [
         r'\b(node\.js|nodejs|express|django|flask|spring|ruby\s+on\s+rails|rails|\.net|fastapi|laravel|asp\.net)\b',
+        r'\b(postgresql|postgres|mysql|mongodb|redis|sqlite|oracle|dynamodb|database|sql)\b',
         r'\b(backend|back-end|back\s+end|api\s+development|server-side|server\s+side)\b',
         r'\b(developed|built|created)\s+(api|backend|server)\s+(using\s+)?(node|express|django|flask|spring)\b'
-    ],
-    "Databases": [
-        r'\b(sql|mysql|postgresql|postgres|mongodb|redis|sqlite|oracle|cassandra|dynamodb|nosql|database)\b',
-        r'\b(database\s+design|data\s+modeling|db\s+administration|data\s+management)\b',
-        r'\b(worked\s+with|used|implemented)\s+(sql|mysql|postgresql|mongodb|redis)\b'
     ],
     "Cloud & DevOps": [
         r'\b(aws|amazon\s+web\s+services|azure|gcp|google\s+cloud|docker|kubernetes|k8s|terraform|ansible|jenkins|ci/cd|git|github|gitlab)\b',
@@ -59,10 +58,27 @@ ENHANCED_SKILL_PATTERNS = {
         r'\b(machine\s+learning|ml|data\s+science|artificial\s+intelligence|ai|deep\s+learning|data\s+analysis)\b',
         r'\b(built|developed|trained)\s+(ml|machine\s+learning|ai|data\s+science)\s+(models|algorithms)\b'
     ],
-    "Software & Tools": [
-        r'\b(jira|confluence|figma|postman|linux|bash|powershell|vscode|visual\s+studio|intellij|eclipse)\b',
-        r'\b(project\s+management|agile|scrum|version\s+control|ide|development\s+tools)\b',
-        r'\b(used|worked\s+with|managed)\s+(jira|confluence|figma|postman)\b'
+    "Mobile Development": [
+        r'\b(react\s+native|flutter|swift|kotlin|xamarin|ionic|cordova|android|ios)\b',
+        r'\b(mobile\s+development|mobile\s+app|native\s+app|cross-platform)\b',
+        r'\b(developed|built|created)\s+(mobile|app)\s+(using\s+)?(react\s+native|flutter|swift|kotlin)\b'
+    ],
+    "Testing & QA": [
+        r'\b(jest|mocha|pytest|junit|selenium|cypress|postman|jmeter|testing|qa|quality\s+assurance)\b',
+        r'\b(unit\s+testing|integration\s+testing|end-to-end|e2e|automated\s+testing)\b',
+        r'\b(wrote|developed|implemented)\s+(tests?|test\s+cases)\b'
+    ],
+    "Software Architecture": [
+        r'\b(microservices|monolithic|event-driven|solid\s+principles|design\s+patterns|mvc|mvp|mvvm|clean\s+architecture)\b',
+        r'\b(architecture|scalability|high\s+availability|load\s+balancing)\b'
+    ],
+    "Communication & Tools": [
+        r'\b(jira|confluence|figma|postman|linux|bash|powershell|vscode|visual\s+studio|intellij|eclipse|agile|scrum|git)\b',
+        r'\b(project\s+management|team\s+collaboration|communication|problem\s+solving)\b'
+    ],
+    "Security": [
+        r'\b(oauth|jwt|ssl|tls|encryption|authentication|authorization|owasp|penetration|security)\b',
+        r'\b(secure|secure\s+coding|security\s+best\s+practices)\b'
     ]
 }
 
@@ -173,6 +189,10 @@ def classify_skills_enhanced(text: str, skill_dict: Dict[str, List[str]] = None)
     
     # Method 2: Pattern-based detection with enhanced patterns - Enhanced patterns ke saath pattern-based detection
     for category, patterns in ENHANCED_SKILL_PATTERNS.items():
+        # Skip if category doesn't exist in found_skills - Make sure category exists before accessing
+        if category not in found_skills:
+            continue
+            
         for pattern in patterns:
             matches = re.finditer(pattern, text_lower, re.IGNORECASE)
             
