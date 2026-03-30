@@ -118,4 +118,4 @@ def generate_pdf_report(data):
     )
     pdf.chapter_body(meta_text)
 
-    return pdf.output(dest='S').encode('latin-1')
+    return pdf.output(dest='S')

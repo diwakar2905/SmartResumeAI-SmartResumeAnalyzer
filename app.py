@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 from typing import Optional
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request, BackgroundTasks
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import aiofiles
@@ -157,19 +157,20 @@ async def generate_report(request: Request, background_tasks: BackgroundTasks):
             raise HTTPException(status_code=400, detail="No analysis data provided")
 
         logger.info("Generating PDF report...")
-        pdf_buffer = generate_pdf_report(analysis_data)
+        pdf_bytes = generate_pdf_report(analysis_data)
         
         filename = analysis_data.get("analysis_metadata", {}).get("file_name", "resume")
         report_filename = f"Smart_Resume_Analysis_{filename}.pdf"
 
-        return FileResponse(
-            io.BytesIO(pdf_buffer),
+        return StreamingResponse(
+            io.BytesIO(pdf_bytes),
             media_type="application/pdf",
-            filename=report_filename
+            headers={"Content-Disposition": f"attachment; filename={report_filename}"}
         )
     except Exception as e:
         logger.error(f"Error generating PDF report: {e}")
-        raise HTTPException(status_code=500, detail="Failed to generate PDF report")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate PDF report: {str(e)}")
 
 @app.post("/analyze")
 async def analyze_resume(resume_file: UploadFile = File(...), background_tasks: BackgroundTasks = BackgroundTasks()):
