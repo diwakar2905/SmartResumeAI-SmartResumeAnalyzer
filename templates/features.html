@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - Smart Resume Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <style>
+         :root {
+            --bg-light: #f3f4f6;
+            --bg-dark: #111827;
+            --card-light: #ffffff;
+            --card-dark: #1f2937;
+            --text-light: #1f2937;
+            --text-dark: #f9fafb;
+            --text-secondary-light: #6b7280;
+            --text-secondary-dark: #9ca3af;
+            --border-light: #e5e7eb;
+            --border-dark: #374151;
+            --accent: #2dd4bf; /* Vibrant Teal */
+            --accent-darker: #14b8a6;
+        }
+
+        .light {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--card-light);
+            --text-primary: var(--text-light);
+            --text-secondary: var(--text-secondary-light);
+            --border-color: var(--border-light);
+        }
+
+        .dark {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: var(--card-dark);
+            --text-primary: var(--text-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border-color: var(--border-dark);
+        }
+        .light .mockup-panel, .light .bg-secondary {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .bg-secondary { background-color: var(--bg-secondary); }
+        .text-accent { color: var(--accent); }
+        .bg-accent { background-color: var(--accent); }
+        .border-custom { border-color: var(--border-color); }
+        .text-primary { color: var(--text-primary); }
+        .text-secondary { color: var(--text-secondary); }
+        .mockup-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+        .light a.bg-accent {
+            box-shadow: 0 4px 14px 0 rgba(45, 212, 191, 0.3);
+            transition: all 0.3s ease;
+        }
+        .light a.bg-accent:hover {
+            box-shadow: 0 6px 20px 0 rgba(45, 212, 191, 0.45);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header --> 
+    <header class="sticky top-0 z-50 bg-[--bg-primary]/80 backdrop-blur-lg border-b border-[--border-color]">
+        <div class="container mx-auto px-6 relative flex justify-between items-center">
+            <!-- Logo -->
+            <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
+                <img src="/static/Free.png" alt="Smart Resume Analyzer Logo" class="h-16 w-auto">
+            </a>
+
+            <!-- Centered Pill Navigation (Desktop) -->
+            <nav class="hidden lg:flex items-center bg-[--bg-secondary] border border-[--border-color] rounded-full p-1 space-x-1">
+                <a href="{{ url_for('about') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">About</a>
+                <a href="{{ url_for('features') }}" class="bg-[--accent]/10 text-primary px-4 py-2 rounded-full transition-colors">Features</a>
+                <a href="{{ url_for('contact') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">Contact</a>
+                <a href="{{ url_for('index') }}#upload" class="bg-[--accent] text-gray-900 font-semibold px-5 py-2 rounded-full hover:bg-[--accent-darker] transition-colors">Upload Resume</a>
+            </nav>
+
+            <!-- Right Side: Theme Toggle & Mobile Menu -->
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="text-2xl text-primary hover:text-[--accent] transition-colors">
+                    <!-- Icon will be injected by JS --> 
+                </button>
+                <button id="mobile-menu-button" class="lg:hidden text-2xl text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu (hidden by default) -->
+            <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-[--bg-secondary] border-b border-[--border-color] p-4">
+                <nav class="flex flex-col space-y-4">
+                    <a href="{{ url_for('about') }}" class="text-primary hover:text-[--accent] transition-colors">About</a>
+                    <a href="{{ url_for('features') }}" class="text-primary hover:text-[--accent] transition-colors">Features</a>
+                    <a href="{{ url_for('contact') }}" class="text-primary hover:text-[--accent] transition-colors">Contact</a>
+                    <a href="{{ url_for('index') }}#upload" class="btn-primary text-center">Upload Resume</a>
+                </nav>
+            </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 pt-24">
+        <!-- Header -->
+        <section class="text-center max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Features Designed for Job Seekers</h1>
+            <p class="text-lg md:text-xl text-secondary">
+                Our powerful tools are built to help you navigate the job market with confidence and land your dream role faster.
+            </p>
+        </section>
+
+        <!-- Feature 1: Resume Parsing & Analysis -->
+        <section class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <i class="fas fa-crosshairs text-accent text-2xl"></i>
+                    <h2 class="text-3xl font-bold">Resume Parsing & Analysis</h2>
+                </div>
+                <p class="text-secondary mb-6">
+                    Our intelligent AI accurately extracts and structures your professional information, including experience, skills, and education. It seamlessly handles multiple formats like PDF and DOCX, ensuring no detail is missed.
+                </p>
+                <ul class="space-y-3 text-secondary">
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Accurate information extraction.</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Support for multiple file formats.</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Structured and readable output.</li>
+                </ul>
+            </div>
+            <div>
+                 <img src="/static/Screenshot 2025-10-23 134551.png" alt="Product mockup showing resume analysis" class="rounded-lg shadow-lg w-full h-auto">
+            </div>
+        </section>
+
+        <!-- Feature 2: Skill Extraction & Gap Analysis -->
+        <section class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="md:order-last">
+                 <img src="/static/Screenshot 2025-10-23 134634.png" alt="Product mockup showing skill gap analysis" class="rounded-lg shadow-lg w-full h-auto">
+            </div>
+            <div class="md:order-first">
+                <div class="flex items-center space-x-3 mb-4">
+                    <i class="fas fa-brain text-accent text-2xl"></i>
+                    <h2 class="text-3xl font-bold">Skill Extraction & Gap Analysis</h2>
+                </div>
+                <p class="text-secondary mb-6">
+                    The tool identifies required skills from a job description and compares them to your resume to spot critical gaps. It recognizes both hard skills (like Python, React) and soft skills (like Leadership, Communication) to give you a complete picture.
+                </p>
+                <ul class="space-y-3 text-secondary">
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Identify missing keywords.</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Covers both hard and soft skills.</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Ensure you match the job requirements.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Feature 3: Tailored, Actionable Feedback -->
+        <section class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <i class="fas fa-list-check text-accent text-2xl"></i>
+                    <h2 class="text-3xl font-bold">Tailored, Actionable Feedback</h2>
+                </div>
+                <p class="text-secondary mb-6">
+                    Unlike generic advice, our feedback is specific to the job you're targeting. Get personalized content recommendations and formatting tips to ensure your resume is fully optimized for Applicant Tracking Systems (ATS) and impresses recruiters.
+                </p>
+                <ul class="space-y-3 text-secondary">
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Personalized content suggestions.</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Formatting tips for ATS compatibility.</li>
+                    <li class="flex items-center"><i class="fas fa-check-circle text-accent mr-2"></i>Actionable steps to improve your score.</li>
+                </ul>
+            </div>
+            <div>
+                 <img src="/static/Screenshot 2025-10-23 134705.png" alt="Product mockup showing actionable feedback" class="rounded-lg shadow-lg w-full h-auto">
+            </div>
+        </section>
+
+        <!-- Call-to-Action -->
+        <section class="mt-24 text-center">
+            <div class="bg-secondary rounded-lg p-12 max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Ready to Optimize Your Resume?</h2>
+                <p class="text-secondary mb-8">Start for free and see how our analysis can help you stand out. No credit card required.</p>
+                <a href="{{ url_for('index') }}#upload" class="bg-accent text-gray-900 font-bold py-4 px-8 rounded-lg text-lg hover:bg-accent-darker transition-all transform hover:scale-105">Get Your Free Analysis</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="py-8 mt-16">
+        <div class="container mx-auto px-6 text-center text-secondary">
+            <p>&copy; 2025 Smart Resume Analyzer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+        const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.classList.add(savedTheme);
+        themeToggle.innerHTML = savedTheme === 'dark' ? sunIcon : moonIcon;
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = moonIcon;
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = sunIcon;
+            }
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>

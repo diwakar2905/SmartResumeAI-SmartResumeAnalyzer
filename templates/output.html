@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis for John_Doe_Resume.pdf</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            corePlugins: {
+                preflight: true,
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <style>
+         :root {
+            --bg-light: #f3f4f6;
+            --bg-dark: #111827;
+            --card-light: #ffffff;
+            --card-dark: #1f2937;
+            --text-light: #1f2937;
+            --text-dark: #f9fafb;
+            --text-secondary-light: #6b7280;
+            --text-secondary-dark: #9ca3af;
+            --border-light: #e5e7eb;
+            --border-dark: #374151;
+            --accent: #2dd4bf; /* Vibrant Teal */
+            --accent-darker: #14b8a6;
+            /* Improved feedback colors for better contrast and vibrancy */
+            --suggestion-bg: #362f1a; /* Darker, less saturated yellow background */
+            --suggestion-text: #facc15; /* Bright Yellow-500 */
+            --strength-bg: #14362b;   /* Darker Green background */
+            --strength-text: #4ade80;   /* Bright Green-400 */
+            --critical-bg: #451a1a;   /* Darker Red background */
+            --critical-text: #f87171;   /* Bright Red-400 */
+        }
+
+        .light {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--card-light);
+            --text-primary: var(--text-light);
+            --text-secondary: var(--text-secondary-light);
+            --border-color: var(--border-light);
+        }
+
+        .dark {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: var(--card-dark);
+            --text-primary: var(--text-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border-color: var(--border-dark);
+        }
+        .light .card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border-color: transparent;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover {
+            background-color: var(--bg-secondary);
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+        .card {
+            background-color: var(--secondary-bg);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+        /* Styles for Circular Progress Gauge */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.8s ease-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        /* Styles for Tabs */
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        /* Styles for mini progress bars */
+        .progress-bar-inner {
+            transition: width 0.8s ease-out;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[--primary-bg]/80 backdrop-blur-lg border-b border-[--border-color]">
+        <div class="container mx-auto px-6 relative flex justify-between items-center">
+            <!-- Logo --> 
+            <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
+                <img src="/static/Free.png" alt="Smart Resume Analyzer Logo" class="h-16 w-auto">
+            </a>
+
+            <!-- Centered Pill Navigation (Desktop) -->
+            <nav class="hidden lg:flex items-center bg-[--secondary-bg] border border-[--border-color] rounded-full p-1 space-x-1">
+                <a href="{{ url_for('about') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">About</a>
+                <a href="{{ url_for('features') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">Features</a>
+                <a href="{{ url_for('contact') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">Contact</a>
+                <a href="{{ url_for('index') }}#upload" class="bg-[--accent] text-gray-900 font-semibold px-5 py-2 rounded-full hover:bg-[--accent-darker] transition-colors">Upload Resume</a>
+            </nav>
+
+            <!-- Right Side: Theme Toggle & Mobile Menu -->
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="text-2xl text-primary hover:text-[--accent] transition-colors"></button>
+                <button id="mobile-menu-button" class="lg:hidden text-2xl text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu (hidden by default) -->
+            <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-[--bg-secondary] border-b border-[--border-color] p-4">
+                <nav class="flex flex-col space-y-4">
+                    <a href="{{ url_for('about') }}" class="text-primary hover:text-[--accent] transition-colors">About</a>
+                    <a href="{{ url_for('features') }}" class="text-primary hover:text-[--accent] transition-colors">Features</a>
+                    <a href="{{ url_for('contact') }}" class="text-primary hover:text-[--accent] transition-colors">Contact</a>
+                    <a href="{{ url_for('index') }}#upload" class="btn-primary text-center">Upload Resume</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-24" id="analysis-dashboard">
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <h1 class="text-3xl lg:text-4xl font-extrabold text-primary">Analysis Report for <span id="filename" class="text-accent">your_resume.pdf</span></h1>
+            <div class="flex items-center space-x-2 sm:space-x-4 flex-shrink-0 w-full sm:w-auto">
+                <button id="reanalyze-btn" class="btn-outline px-4 py-2 rounded-lg transition-colors">Re-analyze</button>
+                <button id="download-report-btn" class="btn-outline px-4 py-2 rounded-lg transition-colors">Download Report</button>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            
+            <!-- Left Column (30%) -->
+            <aside class="lg:col-span-1 space-y-8 lg:sticky lg:top-[6.5rem]">
+                <!-- Overall Score -->
+                <div class="card flex flex-col items-center justify-center text-center p-6">
+                    <h2 class="text-lg font-semibold text-secondary mb-4">Overall Score</h2>
+                    <div class="relative w-48 h-48">
+                        <svg class="w-full h-full" viewBox="0 0 120 120">
+                            <circle class="text-[--border-color]" stroke-width="10" stroke="currentColor" fill="transparent" r="52" cx="60" cy="60"/>
+                            <circle id="progress-ring" class="progress-ring__circle text-[--accent]" stroke-width="10" stroke-linecap="round" stroke="currentColor" fill="transparent" r="52" cx="60" cy="60"/>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="overall-score" class="text-5xl font-extrabold text-primary">0</span>
+                            <span class="text-sm text-secondary">/ 100</span>
+                        </div>
+                    </div>
+                    <p id="score-summary" class="mt-4 text-sm text-secondary">Awaiting analysis...</p>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="card">
+                    <h2 class="text-lg font-semibold text-secondary mb-4">Key Metrics</h2>
+                    <ul class="space-y-4">
+                        <li class="flex justify-between items-center text-sm border-b border-[--border-color] pb-3">
+                            <span class="text-secondary">Processing Time</span> 
+                            <span id="metric-processing-time" class="font-bold text-lg text-primary">N/A</span>
+                        </li>
+                        <li class="flex justify-between items-center text-sm border-b border-[--border-color] pb-3">
+                            <span class="text-secondary">Text Length</span> 
+                            <span id="metric-text-length" class="font-bold text-lg text-primary">N/A</span>
+                        </li>
+                        <li class="flex justify-between items-center text-sm">
+                            <span class="text-secondary">Skill Count</span> 
+                            <span id="metric-skill-count" class="font-bold text-lg text-primary">N/A</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Skills Summary -->
+                <div class="card">
+                    <h2 class="text-lg font-semibold text-secondary mb-4">Skills Summary</h2>
+                    <p id="skills-summary-paragraph" class="text-sm text-secondary">
+                        A summary of detected technical and soft skills will appear here after the analysis is complete.
+                    </p>
+                </div>
+            </aside>
+
+            <!-- Right Column (70%) -->
+            <main class="lg:col-span-2 space-y-8">
+                <div class="card space-y-6">
+                    <h2 class="text-2xl font-bold text-primary border-b border-[--border-color] pb-3">Strengths & Weaknesses</h2>
+                    <div id="strengths-list" class="space-y-2">
+                        <!-- Strengths will be injected here -->
+                    </div>
+                    <div id="weaknesses-list" class="space-y-2">
+                        <!-- Weaknesses will be injected here -->
+                    </div>
+                </div>
+
+                <div class="card space-y-6">
+                    <h2 class="text-2xl font-bold text-primary border-b border-[--border-color] pb-3">Section-wise Improvements</h2>
+                    <div id="improvements-list" class="space-y-2">
+                        <!-- Improvements will be injected here -->
+                    </div>
+                </div>
+
+                <div class="card space-y-6">
+                    <h2 class="text-2xl font-bold text-primary border-b border-[--border-color] pb-3">Recommended Action Plan</h2>
+                    <div id="action-plan-list" class="space-y-2">
+                        <!-- Action plan will be injected here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>
+        // The backend URL for local development
+        const BACKEND_BASE_URL = "http://127.0.0.1:8000";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Global Elements & Theme Logic ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+            const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            html.classList.add(savedTheme);
+            themeToggle.innerHTML = savedTheme === 'dark' ? sunIcon : moonIcon;
+            themeToggle.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    html.classList.add('light');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.innerHTML = moonIcon;
+                } else {
+                    html.classList.remove('light');
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.innerHTML = sunIcon;
+                }
+            });
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // --- Analysis Data Handling ---
+            const analysisResult = JSON.parse(sessionStorage.getItem('analysisResult')); 
+            const filename = sessionStorage.getItem('resumeFilename');
+
+            if (!analysisResult || !filename) {
+                document.getElementById('analysis-dashboard').innerHTML = `
+                    <div class="text-center py-20 card">
+                        <h1 class="text-3xl font-bold text-primary">No Analysis Data Found</h1>
+                        <p class="text-secondary mt-4">Please upload a resume to see the analysis.</p>
+                        <a href="/#upload" class="btn-primary inline-block mt-8">Upload Resume</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // --- Populate Page Header ---
+            document.getElementById('filename').textContent = filename;
+
+            // --- Populate Left Column ---
+            const score = Math.round(analysisResult.score || 0);
+            const scoreElement = document.getElementById('overall-score');
+            const progressRing = document.getElementById('progress-ring');
+            const radius = progressRing.r.baseVal.value;
+            const circumference = 2 * Math.PI * radius;
+            progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+            progressRing.style.strokeDashoffset = circumference;
+
+            function setProgress(percent) {
+                const offset = circumference - (percent / 100) * circumference;
+                progressRing.style.strokeDashoffset = offset;
+                
+                // Animate number
+                let current = 0;
+                const stepTime = 10; // ms
+                const steps = 800 / stepTime;
+                const increment = percent / steps;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= percent) {
+                        current = percent;
+                        clearInterval(timer);
+                    }
+                    scoreElement.textContent = Math.round(current);
+                }, stepTime);
+
+                // Set color based on score
+                if (percent < 50) progressRing.style.stroke = '#ef4444'; // red-500
+                else if (percent < 75) progressRing.style.stroke = '#facc15'; // yellow-400
+                else progressRing.style.stroke = '#4ade80'; // green-400
+
+            }
+            setProgress(score);
+            
+            let scoreSummary = "Your resume needs significant improvements.";
+            if (score >= 85) scoreSummary = "Excellent! Your resume is well-optimized.";
+            else if (score >= 70) scoreSummary = "Good job! Your resume has a strong foundation.";
+            else if (score >= 50) scoreSummary = "Your resume shows potential but needs enhancements.";
+            document.getElementById('score-summary').textContent = scoreSummary;
+
+            document.getElementById('metric-processing-time').textContent = `${analysisResult.analysis_metadata.processing_time.toFixed(2)}s`;
+            document.getElementById('metric-text-length').textContent = `${analysisResult.analysis_metadata.text_length} chars`;
+            const totalSkills = Object.values(analysisResult.skills).reduce((sum, skills) => sum + skills.length, 0);
+            document.getElementById('metric-skill-count').textContent = totalSkills;
+
+            const skillsSummaryP = document.getElementById('skills-summary-paragraph');
+            skillsSummaryP.textContent = `The analysis identified ${totalSkills} skills, including key technologies like ${Object.values(analysisResult.skills).flat().slice(0,3).join(', ')}, and more. A detailed breakdown is available in the report.`;
+
+            // --- Populate Right Column ---
+            const strengthsList = document.getElementById('strengths-list');
+            const weaknessesList = document.getElementById('weaknesses-list');
+            const improvementsList = document.getElementById('improvements-list');
+            const actionPlanList = document.getElementById('action-plan-list');
+
+            // Clear default content
+            strengthsList.innerHTML = '';
+            weaknessesList.innerHTML = '';
+            improvementsList.innerHTML = '';
+            actionPlanList.innerHTML = '';
+
+            const feedbackItem = (text, iconClass) => `<div class="flex items-start"><i class="fas ${iconClass} mt-1 mr-3"></i><span class="text-secondary">${text.replace(/\*+/g, '')}</span></div>`;
+
+            const strengths = analysisResult.feedback.filter(item => item.includes('Strength') || item.includes('Good') || item.includes('Excellent'));
+            strengthsList.innerHTML = strengths.map(s => feedbackItem(s, 'fa-check-circle text-green-400')).join('') || feedbackItem('No specific strengths identified.', 'fa-info-circle text-secondary');
+
+            const weaknesses = analysisResult.feedback.filter(item => item.includes('Missing') || item.includes('weakness') || item.includes('Critical') || item.includes('Poor'));
+            weaknessesList.innerHTML = weaknesses.map(w => feedbackItem(w, 'fa-times-circle text-red-400')).join('') || feedbackItem('No critical weaknesses found.', 'fa-check-circle text-green-400');
+
+            const improvements = analysisResult.feedback.filter(item => item.includes('Suggestion') || item.includes('Section:'));
+            improvementsList.innerHTML = improvements.map(i => feedbackItem(i, 'fa-lightbulb text-yellow-400')).join('') || feedbackItem('No specific improvement suggestions.', 'fa-info-circle text-secondary');
+
+            const actionPlan = analysisResult.feedback.filter(item => item.includes('Action Plan'));
+            actionPlanList.innerHTML = actionPlan.map(a => feedbackItem(a, 'fa-arrow-right text-accent')).join('') || feedbackItem('Review all feedback points and apply changes.', 'fa-arrow-right text-accent');
+
+            // --- NEW: Detailed Feedback Rendering ---
+            const feedbackContainer = document.createElement('div');
+            feedbackContainer.className = 'space-y-6';
+
+            let currentSection = null;
+            let currentList = null;
+
+            const parseAndRenderFeedback = (feedbackArray) => {
+                const container = document.createElement('div');
+                container.className = 'space-y-4';
+
+                feedbackArray.forEach(item => {
+                    item = item.trim();
+                    if (!item) return;
+
+                    // Replace markdown-like bolding with <strong> tags
+                    item = item.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary">$1</strong>');
+
+                    // Handle section titles (e.g., "📊 **Score Breakdown:**")
+                    if (item.match(/^(\p{Emoji}|\s)*<strong/u) && item.endsWith(':</strong>')) {
+                        const titleEl = document.createElement('h3');
+                        titleEl.className = 'text-xl font-bold text-primary pt-4 border-t border-[--border-color]';
+                        titleEl.innerHTML = item;
+                        container.appendChild(titleEl);
+                    } 
+                    // Handle list items (e.g., "  • {strength}")
+                    else if (item.startsWith('•') || item.startsWith('✅') || item.startsWith('👍') || item.startsWith('⚠️') || item.startsWith('❌') || item.startsWith('💡')) {
+                        const listItem = document.createElement('div');
+                        listItem.className = 'flex items-start text-secondary pl-4';
+                        let icon = '';
+                        if (item.includes('✅') || item.includes('Excellent')) icon = '<i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>';
+                        else if (item.includes('💡') || item.includes('Suggestion')) icon = '<i class="fas fa-lightbulb text-yellow-400 mt-1 mr-3"></i>';
+                        else if (item.includes('❌') || item.includes('Poor') || item.includes('Missing')) icon = '<i class="fas fa-times-circle text-red-400 mt-1 mr-3"></i>';
+                        else if (item.includes('⚠️')) icon = '<i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-3"></i>';
+                        else if (item.includes('•')) icon = '<i class="fas fa-circle text-xs text-accent mt-1.5 mr-3"></i>';
+                        
+                        listItem.innerHTML = `${icon}<span>${item.replace(/^(•|✅|👍|⚠️|❌|💡)\s*/, '')}</span>`;
+                        container.appendChild(listItem);
+                    }
+                    // Handle action plan items (e.g., "  1. **Immediate...**")
+                    else if (item.match(/^\d\.\s/)) {
+                         const actionItem = document.createElement('div');
+                         actionItem.className = 'flex items-start text-secondary pl-4';
+                         actionItem.innerHTML = `<i class="fas fa-arrow-right text-accent mt-1 mr-3"></i><span>${item}</span>`;
+                         container.appendChild(actionItem);
+                    }
+                    // Handle general paragraphs
+                    else {
+                        const p = document.createElement('p');
+                        p.className = 'text-secondary';
+                        p.innerHTML = item;
+                        container.appendChild(p);
+                    }
+                });
+                return container;
+            };
+
+            // Replace old feedback sections with the new detailed one
+            const feedbackParent = document.getElementById('strengths-list').parentNode;
+            feedbackParent.innerHTML = ''; // Clear the container
+            feedbackParent.appendChild(parseAndRenderFeedback(analysisResult.feedback));
+            document.getElementById('improvements-list').parentNode.remove();
+            document.getElementById('action-plan-list').parentNode.remove();
+
+
+            // --- Button Handlers ---
+            const reanalyzeBtn = document.getElementById('reanalyze-btn');
+            const downloadBtn = document.getElementById('download-report-btn');
+
+            reanalyzeBtn.addEventListener('click', () => {
+                window.location.href = '/#upload';
+            });
+
+            downloadBtn.addEventListener('click', async () => {
+                downloadBtn.disabled = true;
+                downloadBtn.textContent = 'Generating...';
+
+                try {
+                    const response = await fetch('/api/generate-report', {
+                        method: 'POST', // Corrected: method was not defined
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(analysisResult),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to generate the report.');
+                    }
+
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    // Extract filename from content-disposition header
+                    const disposition = response.headers.get('content-disposition');
+                    const filenameMatch = disposition && disposition.match(/filename="(.+?)"/);
+                    a.download = filenameMatch ? filenameMatch[1] : 'resume-analysis-report.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                } catch (error) {
+                    alert(error.message);
+                } finally {
+                    downloadBtn.disabled = false;
+                    downloadBtn.textContent = 'Download Report';
+                }
+            });
+        });
+    </script>
+    <!-- Global Footer -->
+    <footer class="py-8 mt-16">
+        <div class="container mx-auto px-6 text-center text-secondary">
+            <p>&copy; 2025 Smart Resume Analyzer. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+:root {
+    --bg-dark: #1a202c;
+    --bg-light: #ffffff;
+    --text-dark: #e2e8f0;
+    --text-light: #1a202c;
+    --accent-teal: #4fd1c5;
+    --card-dark: #2d3748;
+    --card-light: #edf2f7;
+}
+
+.light {
+    --bg-primary: var(--bg-light);
+    --text-primary: var(--text-light);
+    --card-bg: var(--card-light);
+}
+
+.dark {
+    --bg-primary: var(--bg-dark);
+    --text-primary: var(--text-dark);
+    --card-bg: var(--card-dark);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.bg-gray-900 {
+    background-color: var(--bg-primary);
+}
+
+.bg-gray-800 {
+    background-color: var(--card-bg);
+}
+
+.bg-gray-700 {
+    background-color: #4a5568;
+}
+
+.text-white {
+    color: var(--text-primary);
+}
+
+.text-gray-400 {
+    color: #a0aec0;
+}
+
+.text-teal-400 {
+    color: var(--accent-teal);
+}
+
+.bg-teal-500 {
+    background-color: var(--accent-teal);
+}
+
+.bg-teal-600 {
+    background-color: #38b2ac;
+}
+
+.hover\:text-teal-400:hover {
+    color: var(--accent-teal);
+}
+
+.hover\:bg-teal-600:hover {
+    background-color: #38b2ac;
+}
+
+.hover\:bg-gray-600:hover {
+    background-color: #4a5568;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.border {
+    border-width: 1px;
+}
+
+.border-gray-600 {
+    border-color: #4a5568;
+}
+
+.transition-transform {
+    transition-property: transform;
+}
+
+.transform {
+    transform: translate(0, 0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
+}
+
+.hover\:scale-105:hover {
+    transform: scale(1.05);
+}

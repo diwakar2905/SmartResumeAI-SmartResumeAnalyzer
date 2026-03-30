@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Smart Resume Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <style>
+         :root {
+            --bg-light: #f3f4f6;
+            --bg-dark: #111827;
+            --card-light: #ffffff;
+            --card-dark: #1f2937;
+            --text-light: #1f2937;
+            --text-dark: #f9fafb;
+            --text-secondary-light: #6b7280;
+            --text-secondary-dark: #9ca3af;
+            --border-light: #e5e7eb;
+            --border-dark: #374151;
+            --accent: #2dd4bf; /* Vibrant Teal */
+            --accent-darker: #14b8a6;
+        }
+
+        .light {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--card-light);
+            --text-primary: var(--text-light);
+            --text-secondary: var(--text-secondary-light);
+            --border-color: var(--border-light);
+        }
+
+        .dark {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: var(--card-dark);
+            --text-primary: var(--text-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border-color: var(--border-dark);
+        }
+        .light .card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .bg-input { background-color: var(--bg-primary); }
+        .text-accent { color: var(--accent); }
+        .bg-accent { background-color: var(--accent); }
+        .border-custom { border-color: var(--border-color); }
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        .light button[type="submit"] {
+            box-shadow: 0 4px 14px 0 rgba(45, 212, 191, 0.3);
+            transition: all 0.3s ease;
+        }
+        .light button[type="submit"]:hover {
+            box-shadow: 0 6px 20px 0 rgba(45, 212, 191, 0.45);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header --> 
+    <header class="sticky top-0 z-50 bg-[--bg-primary]/80 backdrop-blur-lg border-b border-[--border-color]">
+        <div class="container mx-auto px-6 relative flex justify-between items-center">
+            <!-- Logo -->
+            <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
+                <img src="/static/Free.png" alt="Smart Resume Analyzer Logo" class="h-16 w-auto">
+            </a>
+
+            <!-- Centered Pill Navigation (Desktop) -->
+            <nav class="hidden lg:flex items-center bg-[--bg-secondary] border border-[--border-color] rounded-full p-1 space-x-1">
+                <a href="{{ url_for('about') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">About</a>
+                <a href="{{ url_for('features') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">Features</a>
+                <a href="{{ url_for('contact') }}" class="bg-accent/10 text-primary px-4 py-2 rounded-full transition-colors">Contact</a>
+                <a href="{{ url_for('index') }}#upload" class="bg-[--accent] text-gray-900 font-semibold px-5 py-2 rounded-full hover:bg-[--accent-darker] transition-colors">Upload Resume</a>
+            </nav>
+
+            <!-- Right Side: Theme Toggle & Mobile Menu -->
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="text-2xl text-primary hover:text-[--accent] transition-colors">
+                    <!-- Icon will be injected by JS --> 
+                </button>
+                <button id="mobile-menu-button" class="lg:hidden text-2xl text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu (hidden by default) -->
+            <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-[--bg-secondary] border-b border-[--border-color] p-4">
+                <nav class="flex flex-col space-y-4">
+                    <a href="{{ url_for('about') }}" class="text-primary hover:text-[--accent] transition-colors">About</a>
+                    <a href="{{ url_for('features') }}" class="text-primary hover:text-[--accent] transition-colors">Features</a>
+                    <a href="{{ url_for('contact') }}" class="text-primary hover:text-[--accent] transition-colors">Contact</a>
+                    <a href="{{ url_for('index') }}#upload" class="btn-primary text-center">Upload Resume</a>
+                </nav>
+            </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 pt-24">
+        <!-- Header -->
+        <section class="text-center max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Contact Us</h1>
+            <p class="text-lg md:text-xl text-secondary">
+                We're here to help. Get in touch with us for any questions or support.
+            </p>
+        </section>
+
+        <!-- Two-Column Layout -->
+        <section class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-16 max-w-5xl mx-auto">
+            
+            <!-- Left Column: Contact Form -->
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6">Send us a message</h2>
+                <form id="contact-form" class="space-y-6">
+                    <div>
+                        <label for="full-name" class="sr-only">Full Name</label>
+                        <input type="text" name="full-name" id="full-name" placeholder="Full Name" required class="w-full bg-input border-custom rounded-md p-3 focus:ring-emerald-500 focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label for="email" class="sr-only">Email Address</label>
+                        <input type="email" name="email" id="email" placeholder="Email Address" required class="w-full bg-input border-custom rounded-md p-3 focus:ring-emerald-500 focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label for="message" class="sr-only">Message</label>
+                        <textarea name="message" id="message" rows="6" placeholder="Message" required class="w-full bg-input border-custom rounded-md p-3 focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                    </div>
+                    <div>
+                        <button id="submit-btn" type="submit" class="w-full bg-accent text-gray-900 font-bold py-3 px-6 rounded-lg hover:bg-accent-darker transition-all disabled:opacity-50 transform hover:scale-105">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+                <div id="form-status" class="mt-4 text-center"></div>
+            </div>
+
+            <!-- Right Column: Contact Information -->
+            <div class="space-y-8">
+                <h2 class="text-2xl font-bold">Contact Information</h2>
+                <div class="flex items-start space-x-4">
+                    <div class="bg-secondary flex-shrink-0 p-3 rounded-full">
+                        <i class="fas fa-envelope text-accent text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Email</h3>
+                        <a href="mailto:support@smartresume.ai" class="text-secondary hover:text-accent">support@smartresume.ai</a>
+                        <p class="text-sm text-secondary mt-1">We'll get back to you within 24 hours.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="bg-secondary p-3 rounded-full">
+                        <i class="fas fa-phone-alt text-accent text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Phone</h3>
+                        <p class="text-secondary">+1 (555) 123-4567</p>
+                        <p class="text-sm text-secondary mt-1">Mon-Fri, 9am - 5pm EST</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-24 py-8">
+        <div class="container mx-auto px-6 text-center text-secondary">
+            <p>&copy; 2025 Smart Resume Analyzer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+        const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.classList.add(savedTheme);
+        themeToggle.innerHTML = savedTheme === 'dark' ? sunIcon : moonIcon;
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = moonIcon;
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = sunIcon;
+            }
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            formStatus.textContent = '';
+            formStatus.className = 'mt-4 text-center';
+
+            const formData = new FormData(contactForm);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // This endpoint does not exist in the provided backend.
+                // This is a placeholder for when it's implemented.
+                // const response = await fetch('/api/contact-message', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify(data),
+                // });
+
+                // Mocking a successful response for demonstration
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+                const response = { ok: true }; // Mock
+
+                if (!response.ok) {
+                    // const errorData = await response.json();
+                    // throw new Error(errorData.error || 'Failed to send message.');
+                    throw new Error('Failed to send message.'); // Mock error
+                }
+
+                formStatus.textContent = 'Thank you! We will be in touch within 24 hours.';
+                formStatus.classList.add('text-green-400');
+                contactForm.reset();
+
+            } catch (error) {
+                formStatus.textContent = error.message;
+                formStatus.classList.add('text-red-400');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+    </script>
+
+</body>
+</html>

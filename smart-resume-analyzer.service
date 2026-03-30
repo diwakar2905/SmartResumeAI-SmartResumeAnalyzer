@@ -1,0 +1,17 @@
+[Unit]
+Description=Smart Resume Analyzer
+After=network.target
+
+[Service]
+Type=notify
+User=www-data
+WorkingDirectory=/var/www/smart-resume-analyzer
+Environment="PATH=/var/www/smart-resume-analyzer/venv/bin"
+ExecStart=/var/www/smart-resume-analyzer/venv/bin/gunicorn --config gunicorn.conf.py app:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

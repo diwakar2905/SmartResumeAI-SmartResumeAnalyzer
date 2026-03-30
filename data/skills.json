@@ -1,0 +1,53 @@
+{
+  "Programming Languages": [
+    "Python", "JavaScript", "TypeScript", "Java", "C++", "C#", "PHP", "Ruby", "Go", "Rust",
+    "Swift", "Kotlin", "Scala", "Perl", "R", "Julia", "MATLAB", "Objective-C", "VB.NET",
+    "Groovy", "Dart", "Elixir", "Clojure", "Haskell", "F#", "Lua", "Shell Script", "Bash"
+  ],
+  "Web & Frontend": [
+    "React", "Vue.js", "Angular", "Next.js", "Svelte", "jQuery", "HTML", "CSS", "SASS", "Less",
+    "Bootstrap", "Tailwind CSS", "Material UI", "Webpack", "Gulp", "Grunt", "Web APIs",
+    "REST APIs", "GraphQL", "AJAX", "Responsive Design", "Figma", "Adobe XD"
+  ],
+  "Backend & Databases": [
+    "Node.js", "Express", "Django", "Flask", "Spring Boot", "Spring", "ASP.NET", "Ruby on Rails",
+    "FastAPI", "PostgreSQL", "MySQL", "MongoDB", "Redis", "Elasticsearch", "Firebase",
+    "DynamoDB", "Oracle", "SQL Server", "SQLite", "Cassandra", "HBase", "Memcached"
+  ],
+  "Cloud & DevOps": [
+    "AWS", "Azure", "Google Cloud", "Docker", "Kubernetes", "Jenkins", "GitLab CI/CD", "GitHub Actions",
+    "Terraform", "CloudFormation", "Ansible", "Puppet", "Chef", "Vagrant", "Linux",
+    "Git", "SVN", "Jira", "Confluence", "Slack", "PagerDuty", "Nginx", "Apache"
+  ],
+  "Data Science & ML": [
+    "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch", "Scikit-learn", "Pandas",
+    "NumPy", "Matplotlib", "Seaborn", "Plotly", "OpenCV", "NLP", "Computer Vision",
+    "Keras", "XGBoost", "LightGBM", "Spark", "Hadoop", "Tableau", "Power BI", "Data Analytics",
+    "Statistics", "Data Mining", "Big Data", "A/B Testing"
+  ],
+  "Mobile Development": [
+    "React Native", "Flutter", "Swift", "Kotlin", "Xamarin", "Ionic", "Cordova",
+    "Android", "iOS", "Mobile UI", "App Store", "Google Play"
+  ],
+  "Testing & QA": [
+    "Jest", "Mocha", "Pytest", "JUnit", "Selenium", "Cypress", "Postman", "SoapUI",
+    "LoadRunner", "JMeter", "BDD", "TDD", "Unit Testing", "Integration Testing",
+    "End-to-End Testing", "Performance Testing", "Security Testing", "Manual Testing",
+    "Automated Testing", "Test Management", "QA Automation"
+  ],
+  "Software Architecture": [
+    "Microservices", "Monolithic Architecture", "Event-Driven Architecture", "SOLID Principles",
+    "Design Patterns", "MVC", "MVP", "MVVM", "Clean Architecture", "Scalability",
+    "High Availability", "Fault Tolerance", "Load Balancing", "Caching Strategies"
+  ],
+  "Communication & Tools": [
+    "Communication", "Team Collaboration", "Problem Solving", "Critical Thinking",
+    "Leadership", "Project Management", "Agile", "Scrum", "Kanban", "Microsoft Office",
+    "Google Workspace", "Zoom", "Microsoft Teams"
+  ],
+  "Security": [
+    "OAuth", "JWT", "SSL/TLS", "Encryption", "Authentication", "Authorization",
+    "OWASP", "Penetration Testing", "Security Audits", "Data Protection", "GDPR",
+    "Cybersecurity", "Web Security", "API Security"
+  ]
+}

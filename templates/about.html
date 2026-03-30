@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Smart Resume Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-light: #f3f4f6;
+            --bg-dark: #111827;
+            --card-light: #ffffff;
+            --card-dark: #1f2937;
+            --text-light: #1f2937;
+            --text-dark: #f9fafb;
+            --text-secondary-light: #6b7280;
+            --text-secondary-dark: #9ca3af;
+            --border-light: #e5e7eb;
+            --border-dark: #374151;
+            --accent: #2dd4bf; /* Vibrant Teal */
+            --accent-darker: #14b8a6;
+        }
+
+        .light {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--card-light);
+            --text-primary: var(--text-light);
+            --text-secondary: var(--text-secondary-light);
+            --border-color: var(--border-light);
+        }
+
+        .dark {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: var(--card-dark);
+            --text-primary: var(--text-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border-color: var(--border-dark);
+        }
+        
+        .light .bg-secondary {
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+             border-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            color: #111827;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem; /* Rounded rectangle */
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-darker);
+            transform: translateY(-2px);
+        }
+        .light .btn-primary {
+            box-shadow: 0 4px 14px 0 rgba(45, 212, 191, 0.3);
+        }
+        .light .btn-primary:hover {
+            box-shadow: 0 6px 20px 0 rgba(45, 212, 191, 0.45);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: var(--accent);
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[--bg-primary]/80 backdrop-blur-lg border-b border-[--border-color]">
+        <div class="container mx-auto px-6 relative flex justify-between items-center">
+            <!-- Logo -->
+            <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
+                <img src="/static/Free.png" alt="Smart Resume Analyzer Logo" class="h-16 w-auto">            </a>
+
+            <!-- Centered Pill Navigation (Desktop) -->
+            <nav class="hidden lg:flex items-center bg-[--bg-secondary] border border-[--border-color] rounded-full p-1 space-x-1">
+                <a href="{{ url_for('about') }}" class="bg-[--accent]/10 text-primary px-4 py-2 rounded-full transition-colors">About</a>
+                <a href="{{ url_for('features') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">Features</a>
+                <a href="{{ url_for('contact') }}" class="text-secondary hover:text-primary px-4 py-2 rounded-full transition-colors">Contact</a>
+                <a href="{{ url_for('index') }}#upload" class="bg-[--accent] text-gray-900 font-semibold px-5 py-2 rounded-full hover:bg-[--accent-darker] transition-colors">Upload Resume</a>
+            </nav>
+
+            <!-- Right Side: Theme Toggle & Mobile Menu -->
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="text-2xl text-primary hover:text-[--accent] transition-colors">
+                    <!-- Icon will be injected by JS --> 
+                </button>
+                <button id="mobile-menu-button" class="lg:hidden text-2xl text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu (hidden by default) -->
+            <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-[--bg-secondary] border-b border-[--border-color] p-4">
+                <nav class="flex flex-col space-y-4">
+                    <a href="{{ url_for('about') }}" class="text-primary hover:text-[--accent] transition-colors">About</a>
+                    <a href="{{ url_for('features') }}" class="text-primary hover:text-[--accent] transition-colors">Features</a>
+                    <a href="{{ url_for('contact') }}" class="text-primary hover:text-[--accent] transition-colors">Contact</a>
+                    <a href="{{ url_for('index') }}#upload" class="btn-primary text-center">Upload Resume</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 pt-24">
+        <!-- Header & Mission Statement -->
+        <section class="text-center max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-primary">About Smart Resume Analyzer</h1>
+            <p class="text-lg md:text-xl text-secondary">
+                Our mission is to empower job seekers with intelligent, AI-driven tools to create application materials that stand out to both recruiters and Applicant Tracking Systems (ATS).
+            </p>
+        </section>
+
+        <!-- Our Purpose & How It Works -->
+        <section class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12 max-w-7xl mx-auto">
+            <div class="bg-secondary p-8 rounded-lg border border-border-color">
+                <h2 class="text-2xl font-bold mb-4 text-primary">Our Purpose</h2>
+                <p class="text-secondary">
+                    In today's hyper-competitive job market, a generic resume is simply not enough to capture attention. Most applications are first scanned by Applicant Tracking Systems (ATS), and only the top-scoring resumes ever reach a human reviewer. Smart Resume Analyzer was created to solve this problem, using cutting-edge AI to provide data-driven feedback that helps you tailor your resume to the specific requirements of any job.
+                </p>
+            </div>
+            <div class="bg-secondary p-8 rounded-lg border border-border-color">
+                <h2 class="text-2xl font-bold mb-4 text-primary">How It Works</h2>
+                <p class="text-secondary">
+                    Our process is simple. First, the platform analyzes your resume against the job description you're targeting. Then, it generates a comprehensive report highlighting areas for improvement and providing actionable suggestions. The ultimate goal is to optimize your resume to satisfy both human recruiters and ATS algorithms, dramatically increasing your chances of landing an interview.
+                </p>
+            </div>
+        </section>
+
+        <!-- Key Benefits -->
+        <section class="mt-20 max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Key Benefits</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Benefit 1: Efficiency -->
+                <div class="bg-secondary p-8 rounded-lg border border-border-color text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="w-12 h-12 text-[--accent]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-primary">Increase Efficiency</h3>
+                    <p class="text-secondary">Save countless hours of manual resume tailoring. Our AI provides instant, targeted feedback, letting you focus on applying, not guessing.</p>
+                </div>
+                <!-- Benefit 2: Visibility -->
+                <div class="bg-secondary p-8 rounded-lg border border-border-color text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="w-12 h-12 text-[--accent]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-primary">Boost Visibility</h3>
+                    <p class="text-secondary">Optimize your resume with the right keywords and formatting to get past automated filters and into the hands of a human reviewer.</p>
+                </div>
+                <!-- Benefit 3: Confidence -->
+                <div class="bg-secondary p-8 rounded-lg border border-border-color text-center">
+                    <div class="flex justify-center mb-4">
+                        <svg class="w-12 h-12 text-[--accent]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 20.417l4.5-4.5M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-primary">Gain Confidence</h3>
+                    <p class="text-secondary">Apply for jobs with the assurance that your resume is professional, polished, and perfectly aligned with the role's requirements.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call-to-Action -->
+        <section class="mt-24 text-center bg-secondary py-16 rounded-lg border border-border-color">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4 text-primary">Ready to Get Started?</h2>
+                <p class="text-secondary mb-8 px-4">Take the guesswork out of resume writing and let our AI give you the competitive edge you need.</p>
+                <a href="{{ url_for('index') }}#upload" class="btn-primary inline-block transform hover:scale-105">Analyze My Resume Now</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="py-8 mt-16">
+        <div class="container mx-auto px-6 text-center text-secondary">
+            <p>&copy; 2025 Smart Resume Analyzer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+        const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.classList.add(savedTheme);
+        themeToggle.innerHTML = savedTheme === 'dark' ? sunIcon : moonIcon;
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = moonIcon;
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = sunIcon;
+            }
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>
