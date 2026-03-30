@@ -1,90 +1,39 @@
-import fitz  # PyMuPDF
 import re
 from docx import Document
-import spacy
 import os
 import logging
 
+try:
+    from PyPDF2 import PdfReader
+except ImportError:
+    PdfReader = None
+
 logger = logging.getLogger(__name__)
 
-# Load the spaCy model - spaCy model ko load karte hain
-try:
-    nlp = spacy.load('en_core_web_sm')
-except OSError:
-    logger.error("Spacy model not found. Please run: python -m spacy download en_core_web_sm")
-    nlp = None
+# spaCy model disabled (not available in deploy environment)
+nlp = None
 
 
 def extract_text_from_pdf(path):
-    """Extract text from a PDF file using PyMuPDF (fitz) with multiple fallback methods - PDF se text extract karte hain multiple methods se."""
+    """Extract text from a PDF file using pypdf (pure Python, no compilation needed)."""
+    if PdfReader is None:
+        logger.error("pypdf not available")
+        return None
+        
     text = ""
     try:
-        with fitz.open(path) as doc:  # Use context manager for safe file handling - Safe file handling ke liye context manager use karte hain
-            logger.info(f"PDF opened successfully. Pages: {len(doc)}")
+        with open(path, 'rb') as file:
+            pdf_reader = PdfReader(file)
+            logger.info(f"PDF opened successfully. Pages: {len(pdf_reader.pages)}")
             
-            for page_num, page in enumerate(doc):
-                logger.info(f"Processing page {page_num + 1}")
-                
-                # Method 1: Try standard text extraction - Method 1: Standard text extraction try karte hain
+            for page_num, page in enumerate(pdf_reader.pages):
                 try:
-                    page_text = page.get_text("text")
+                    page_text = page.extract_text()
                     if page_text and page_text.strip():
                         text += page_text + "\n"
                         logger.info(f"Page {page_num + 1}: Extracted {len(page_text)} characters")
-                        continue
                 except Exception as e:
-                    logger.warning(f"Standard text extraction failed for page {page_num + 1}: {e}")
-                
-                # Method 2: Try HTML extraction and clean it - Method 2: HTML extraction try karte hain aur clean karte hain
-                try:
-                    html_text = page.get_text("html")
-                    if html_text:
-                        # Clean HTML tags - HTML tags ko clean karte hain
-                        import re
-                        clean_text = re.sub(r'<[^>]+>', '', html_text)
-                        clean_text = re.sub(r'\s+', ' ', clean_text).strip()
-                        if clean_text:
-                            text += clean_text + "\n"
-                            logger.info(f"Page {page_num + 1}: Extracted {len(clean_text)} characters via HTML")
-                            continue
-                except Exception as e:
-                    logger.warning(f"HTML extraction failed for page {page_num + 1}: {e}")
-                
-                # Method 3: Try raw text extraction - Method 3: Raw text extraction try karte hain
-                try:
-                    raw_text = page.get_text("raw")
-                    if raw_text and raw_text.strip():
-                        text += raw_text + "\n"
-                        logger.info(f"Page {page_num + 1}: Extracted {len(raw_text)} characters via raw")
-                        continue
-                except Exception as e:
-                    logger.warning(f"Raw text extraction failed for page {page_num + 1}: {e}")
-                
-                # Method 4: Try to extract text from blocks - Method 4: Blocks se text extract karne ki koshish karte hain
-                try:
-                    blocks = page.get_text("dict")
-                    page_text = ""
-                    for block in blocks.get("blocks", []):
-                        if "lines" in block:
-                            for line in block["lines"]:
-                                for span in line.get("spans", []):
-                                    page_text += span.get("text", "") + " "
-                    if page_text.strip():
-                        text += page_text + "\n"
-                        logger.info(f"Page {page_num + 1}: Extracted {len(page_text)} characters via blocks")
-                except Exception as e:
-                    logger.warning(f"Block extraction failed for page {page_num + 1}: {e}")
-                
-                # Extract tables if present - Agar tables hain to extract karte hain
-                try:
-                    tables = page.get_tables()
-                    for table in tables:
-                        for row in table:
-                            row_text = " | ".join([cell.strip() for cell in row if cell.strip()])
-                            if row_text:
-                                text += row_text + "\n"
-                except Exception as e:
-                    logger.warning(f"Table extraction failed for page {page_num + 1}: {e}")
+                    logger.warning(f"Text extraction failed for page {page_num + 1}: {e}")
                             
     except Exception as e:
         logger.error(f"Error reading PDF {path}: {e}")
