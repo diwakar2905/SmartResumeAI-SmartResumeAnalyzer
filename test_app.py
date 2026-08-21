@@ -1,6 +1,7 @@
 import unittest
 import os
 import json
+from fastapi.testclient import TestClient
 from parser.resume_parser import extract_text_from_pdf, extract_basic_info
 from utils.section_extractor import extract_sections
 from utils.scoring import score_resume, WEIGHTS
@@ -11,8 +12,7 @@ from app import app
 class TestSmartResumeAnalyzer(unittest.TestCase):
     def setUp(self):
         self.sample_pdf = "sample_resume.pdf"
-        self.app = app.test_client()
-        self.app.testing = True
+        self.app = TestClient(app)
 
     def test_pdf_extraction(self):
         """Test that text can be successfully extracted from the sample PDF."""
@@ -102,17 +102,17 @@ class TestSmartResumeAnalyzer(unittest.TestCase):
         self.assertGreater(len(pdf_bytes), 0)
 
     def test_health_check_endpoint(self):
-        """Test Flask health check endpoint."""
+        """Test health check endpoint."""
         response = self.app.get('/health')
         self.assertEqual(response.status_code, 200)
-        data = json.loads(response.data)
+        data = response.json()
         self.assertEqual(data["status"], "healthy")
 
     def test_test_endpoint(self):
-        """Test Flask test connectivity endpoint."""
+        """Test test connectivity endpoint."""
         response = self.app.get('/test')
         self.assertEqual(response.status_code, 200)
-        data = json.loads(response.data)
+        data = response.json()
         self.assertEqual(data["status"], "success")
 
 if __name__ == '__main__':

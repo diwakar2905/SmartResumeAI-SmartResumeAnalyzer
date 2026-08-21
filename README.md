@@ -1,6 +1,6 @@
 # 🧠 Smart Resume Analyzer
 
-A Flask-based resume analysis web application that extracts text from PDF/DOCX files and applies rule-based section detection, skill classification, scoring, and feedback generation.
+A FastAPI-based resume analysis web application that extracts text from PDF/DOCX files and applies rule-based section detection, skill classification, scoring, and feedback generation.
 
 ---
 
@@ -34,7 +34,7 @@ A Flask-based resume analysis web application that extracts text from PDF/DOCX f
 ## ⚙️ How It Works
 
 1. **Upload**: User uploads a resume (PDF or DOCX, max 16MB) through the web interface.
-2. **Parsing**: The Flask server saves the file temporarily, extracts raw text, and deletes the file immediately.
+2. **Parsing**: The FastAPI server saves the file temporarily, extracts raw text, and deletes the file immediately.
 3. **Analysis**:
    - **Basic Info**: Regular expressions match email and phone numbers. spaCy's `en_core_web_sm` model extracts names from the top lines.
    - **Skills & Categories**: Checks the text for 100+ keywords across categories. Calculates a confidence score based on context keywords (e.g., "proficient in", "years of experience").
@@ -45,7 +45,7 @@ A Flask-based resume analysis web application that extracts text from PDF/DOCX f
 
 ## 🛠️ Technology Stack
 
-- **Backend Framework**: **Flask** (2.3.3)
+- **Backend Framework**: **FastAPI** (0.110.0)
 - **Text & Document Extractors**: **PyMuPDF (fitz)**, **python-docx**
 - **NLP / Entity Extraction**: **spaCy** (3.7.2 with `en_core_web_sm` model)
 - **PDF Report Compiler**: **fpdf2**
@@ -112,7 +112,7 @@ A Flask-based resume analysis web application that extracts text from PDF/DOCX f
 
 ```
 smart-resume-analyzer/
-├── app.py                     # Main Flask application and API router
+├── app.py                     # Main FastAPI application and API router
 ├── requirements.txt           # Declared Python dependencies
 ├── deploy.py                  # Automated production setup script
 ├── main.py                    # Terminal-based resume runner interface

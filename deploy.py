@@ -42,8 +42,9 @@ def check_dependencies():
     print("🔍 Checking dependencies...")
     
     required_packages = [
-        'flask', 'flask-cors', 'pymupdf', 'python-docx',
-        'spacy', 'werkzeug', 'gunicorn', 'python-dotenv'
+        'fastapi', 'uvicorn', 'python-multipart', 'jinja2',
+        'pymupdf', 'python-docx', 'spacy', 'werkzeug',
+        'gunicorn', 'python-dotenv'
     ]
     
     missing_packages = []
@@ -222,7 +223,8 @@ def run_tests():
     
     # Test imports
     try:
-        import flask
+        import fastapi
+        import uvicorn
         import spacy
         print("✅ All imports successful")
     except ImportError as e:

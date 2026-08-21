@@ -6,7 +6,7 @@ import os
 port = os.environ.get("PORT", "5001")
 bind = f"0.0.0.0:{port}"
 workers = 4
-worker_class = "sync"
+worker_class = "uvicorn.workers.UvicornWorker"
 worker_connections = 1000
 timeout = 120
 keepalive = 2

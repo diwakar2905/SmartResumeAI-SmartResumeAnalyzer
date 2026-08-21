@@ -6,8 +6,8 @@ This document covers production deployment configurations, infrastructure setup,
 
 ## 🛠️ Tech Stack & Production Components
 
-- **Backend Gateway**: Flask serving a REST API.
-- **Production WSGI Server**: Gunicorn (configured in `gunicorn.conf.py` with 4 synchronous worker processes).
+- **Backend Gateway**: FastAPI serving a REST API.
+- **Production ASGI Server**: Gunicorn (configured in `gunicorn.conf.py` with 4 Uvicorn ASGI worker processes).
 - **Reverse Proxy**: Nginx (configured in `nginx.conf` for reverse proxying to Gunicorn, static asset hosting, caching, and rate limiting limits).
 - **Service Management**: systemd service wrapper for process management and automatic restarts.
 
@@ -97,7 +97,7 @@ curl http://127.0.0.1:5001/stats
 
 ## 🔒 Security Configuration
 
-- **Upload Folder Bounds**: File uploads are capped at 16MB via Flask's `MAX_CONTENT_LENGTH`.
+- **Upload Folder Bounds**: File uploads are capped at 16MB via FastAPI's content length checks.
 - **Allowed Formats**: Validates headers and limits extensions to `{'pdf', 'docx'}`.
 - **Filename Sanitization**: Sanitizes file uploads using `werkzeug.utils.secure_filename` and appends timestamps to prevent directory traversal or file collision.
 - **Immediate Cleanup**: Temporary files are deleted immediately after parsing. If any orphaned file remains, a cleanup job purges files older than 1 hour during requests.
