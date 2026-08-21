@@ -218,8 +218,8 @@
     </div>
 {% raw %}
     <script>
-        // The backend URL from your Railway deployment
-        const BACKEND_BASE_URL = "https://web-production-52705.up.railway.app";
+        // Use relative path if served by the backend port, otherwise fallback to port 5001
+        const BACKEND_BASE_URL = window.location.port === "5001" ? "" : "http://127.0.0.1:5001";
 
         document.addEventListener('DOMContentLoaded', () => {
             // --- Global Elements & Theme Logic ---

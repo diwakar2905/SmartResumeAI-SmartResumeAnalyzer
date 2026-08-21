@@ -265,8 +265,8 @@
     </footer>
 
     <script>
-        // Use relative path for local development and production
-        const BACKEND_BASE_URL = "";
+        // Use relative path if served by the backend port, otherwise fallback to port 5001
+        const BACKEND_BASE_URL = window.location.port === "5001" ? "" : "http://127.0.0.1:5001";
 
         // --- Theme Toggle ---
         const themeToggle = document.getElementById('theme-toggle');
