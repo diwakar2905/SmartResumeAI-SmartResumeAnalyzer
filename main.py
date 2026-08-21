@@ -2,7 +2,7 @@ import os
 
 from parser.resume_parser import extract_text_from_pdf, extract_text_from_docx, extract_basic_info
 from utils.scoring import score_resume, WEIGHTS
-from utils.feedback import generate_feedback
+from utils.feedback import generate_enhanced_feedback
 from utils.skill_classifier import classify_skills
 from utils.section_extractor import extract_sections
 
@@ -59,15 +59,18 @@ def main():
                 print(f"  {category:<25}: {', '.join(skill_list)}")
 
     sections = extract_sections(text)
-    score = score_resume(sections, WEIGHTS)
-    feedback = generate_feedback(sections, score, WEIGHTS)
+    score_data = score_resume(sections, WEIGHTS, text)
+    score = score_data["overall_score"]
+    feedback = generate_enhanced_feedback(sections, score_data, text)
     
     print_section("Score & Feedback", "⭐")
-    print(f"  Resume Score: {score}/100")
+    print(f"  Resume Score: {score}/100 (Grade: {score_data['grade']})")
     if feedback:
         print("\n  📝 Feedback for Improvement:")
         for item in feedback:
-            print(f"     {item}")
+            # Clean markdown highlights from terminal printout
+            item_clean = item.replace("**", "").replace("•", "-").strip()
+            print(f"     {item_clean}")
 
 if __name__ == '__main__':
     main()

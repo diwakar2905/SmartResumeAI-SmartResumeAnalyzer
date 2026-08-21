@@ -6,8 +6,10 @@ SECTION_KEYWORDS = {
     "summary": r"^\s*(professional\s+)?summary\b",
     "experience": r"^\s*(work\s+)?experience\b|^\s*professional\s+experience\b",
     "education": r"^\s*education\b",
-    "projects": r"^\s*projects\b",
-    "certifications": r"^\s*certifications\b|^\s*licenses\s*(?:&\s*certifications)?\b"
+    "projects": r"^\s*projects\b|^\s*personal\s+projects\b",
+    "certifications": r"^\s*certifications\b|^\s*licenses\s*(?:&\s*certifications)?\b",
+    "skills": r"^\s*skills\b|^\s*technical\s+skills\b|^\s*core\s+competencies\b",
+    "achievements": r"^\s*achievements\b|^\s*awards\b|^\s*honors\b"
 }
 
 def extract_sections(text):

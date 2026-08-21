@@ -215,25 +215,34 @@ def score_resume(sections: Dict[str, bool], weights: Dict[str, int], text: str =
     for section, present in sections.items():
         if present:
             section_score += weights.get(section, 0)
+            
+    # Calculate maximum possible section score to normalize
+    max_section_score = sum(weights.values())
+    
+    # Normalize components to 100-point scale - Components ko 100-point scale pe normalize karte hain
+    section_score_normalized = min(100.0, (section_score / max_section_score * 100.0)) if max_section_score > 0 else 0
+    structure_score_normalized = min(100.0, (structure_score / 85.0 * 100.0))
+    content_score_normalized = min(100.0, (content_score / 70.0 * 100.0)) if text else 0
+    impact_score_normalized = min(100.0, (impact_score / 80.0 * 100.0)) if text else 0
     
     # Weighted combination - Weighted combination calculate karte hain
     overall_score = (
-        section_score * 0.3 +      # 30% weight to sections
-        structure_score * 0.25 +   # 25% weight to structure
-        content_score * 0.25 +     # 25% weight to content
-        impact_score * 0.2         # 20% weight to impact
+        section_score_normalized * 0.3 +      # 30% weight to sections
+        structure_score_normalized * 0.25 +   # 25% weight to structure
+        content_score_normalized * 0.25 +     # 25% weight to content
+        impact_score_normalized * 0.2         # 20% weight to impact
     )
     
     # Ensure score doesn't exceed 100 - Score 100 se zyada na ho
-    overall_score = min(overall_score, 100)
+    overall_score = min(overall_score, 100.0)
     
     return {
         "overall_score": round(overall_score, 1),
         "breakdown": {
-            "section_score": round(section_score, 1),
-            "structure_score": round(structure_score, 1),
-            "content_score": round(content_score, 1),
-            "impact_score": round(impact_score, 1)
+            "section_score": round(section_score_normalized, 1),
+            "structure_score": round(structure_score_normalized, 1),
+            "content_score": round(content_score_normalized, 1),
+            "impact_score": round(impact_score_normalized, 1)
         },
         "grade": get_grade(overall_score),
         "strengths": identify_strengths(sections, text),

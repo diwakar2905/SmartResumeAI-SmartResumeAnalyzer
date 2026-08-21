@@ -158,7 +158,7 @@ def extract_basic_info(text):
     return {
         "name": name.strip() if name else "Not Found",
         "email": email if email else "Not Found",
-        "phone": phone if phone else "Not Found"
+        "phone": phone.strip() if phone else "Not Found"
     }
 
 

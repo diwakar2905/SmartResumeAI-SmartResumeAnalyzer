@@ -150,7 +150,7 @@ def analyze_resume():
             return jsonify({"error": "No file selected"}), 400
         
         if not file or not allowed_file(file.filename):
-            return jsonify({"error": "Unsupported file type. Please upload a PDF, DOCX, or DOC file."}), 400
+            return jsonify({"error": "Unsupported file type. Please upload a PDF or DOCX file."}), 400
 
         # Secure filename and save - Secure filename banate hain aur save karte hain
         filename = secure_filename(file.filename)
@@ -168,8 +168,8 @@ def analyze_resume():
         if file_extension == 'pdf':
             logger.info("Extracting text from PDF...")
             text = extract_text_from_pdf(filepath)
-        elif file_extension in ['docx', 'doc']:
-            logger.info("Extracting text from DOCX/DOC...")
+        elif file_extension == 'docx':
+            logger.info("Extracting text from DOCX...")
             text = extract_text_from_docx(filepath)
         
         if not text:

@@ -6,6 +6,5 @@ spacy==3.7.2
 werkzeug==2.3.7
 gunicorn==21.2.0
 python-dotenv==1.0.0
-Pillow==10.0.1
 fpdf2==2.7.8
 en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1.tar.gz
