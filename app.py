@@ -7,6 +7,10 @@ from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Import your existing functions - Apne existing functions ko import karte hain
 from parser.resume_parser import extract_text_from_pdf, extract_text_from_docx, extract_basic_info
@@ -286,5 +290,7 @@ def static_files(filename):
 
 if __name__ == '__main__':
     logger.info("Starting Smart Resume Analyzer server...")
-    logger.info("Server will be available at: http://127.0.0.1:5001")
-    app.run(debug=False, port=5001, host='127.0.0.1')
+    port = int(os.environ.get("PORT", 5001))
+    host = os.environ.get("HOST", "127.0.0.1")
+    logger.info(f"Server will be available at: http://{host}:{port}")
+    app.run(debug=False, port=port, host=host)
