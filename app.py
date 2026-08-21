@@ -300,8 +300,14 @@ async def get_stats():
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
-    """Serve favicon."""
-    return FileResponse(os.path.join('static', 'favicon.ico'))
+    """Serve favicon safely."""
+    ico_path = os.path.join('static', 'favicon.ico')
+    png_path = os.path.join('static', 'Free.png')
+    if os.path.exists(ico_path):
+        return FileResponse(ico_path)
+    elif os.path.exists(png_path):
+        return FileResponse(png_path, media_type="image/png")
+    return Response(status_code=204)
 
 if __name__ == '__main__':
     import uvicorn
